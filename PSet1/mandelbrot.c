@@ -24,7 +24,7 @@ int main() {
 				z = z * z + var;	
 			}
 			
-			double mag = sqrt(creal (z) * creal (z) + cimag (z) * cimag (z));
+			double mag = sqrt( creal (z) * creal (z) + cimag (z) * cimag (z) );
 			if (mag <= 2.0){
 				arr[c][r] = '*';
 			}
@@ -39,7 +39,6 @@ int main() {
 		for (c = 0; c < col + 1; c = c + 1) {
 			printf("%c", arr[c][r]);
 		}
-		//printf("%s","\n");
 	}
 	return 0;
 }
