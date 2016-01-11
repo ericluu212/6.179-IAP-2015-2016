@@ -23,10 +23,6 @@ int main() {
 			for (count = 1; count <= 500; count = count + 1){
 				z = z * z + var;	
 			}
-			printf("%c", arr[c][r]);
-		}
-	}
-	return 0;
 			
 			double mag = sqrt(creal (z) * creal (z) + cimag (z) * cimag (z));
 			if (mag <= 2.0){
@@ -41,4 +37,9 @@ int main() {
 	//print output
 	for (r = 0; r < row; r = r + 1){
 		for (c = 0; c < col + 1; c = c + 1) {
+			printf("%c", arr[c][r]);
+		}
+		//printf("%s","\n");
+	}
+	return 0;
 }
