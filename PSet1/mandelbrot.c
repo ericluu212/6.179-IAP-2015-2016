@@ -19,13 +19,14 @@ int main() {
 			
 			var = ( c * 3.5 /col - 2.5) + ((r * 1.0 /row -.5) *  2 * I);
 			double complex z = 0.0;
-			int count;
-			for (count = 1; count <= 500; count = count + 1){
-				z = z * z + var;	
+			int count = 1;
+			int maxCount = 500;
+			while (count <= maxCount && (creal (z) * creal (z) + cimag (z) * cimag (z)) < 4 ){
+				z = z * z + var;
+				count++;
 			}
-			
-			double mag = sqrt( creal (z) * creal (z) + cimag (z) * cimag (z) );
-			if (mag <= 2.0){
+			double magSquare = creal (z) * creal (z) + cimag (z) * cimag (z) ;
+			if (magSquare <= 4.0){
 				arr[c][r] = '*';
 			}
 			else {
