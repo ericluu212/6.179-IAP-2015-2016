@@ -1,28 +1,88 @@
 //Huff Encoding
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+//Define node structure
+struct node {
+	char value;
+	struct node *left, *right; // pointer
+};
+
+//search tree
+int search(char c[], struct node *n, int i){
+	//printf("%c\n", n->value);
+	if (n->value != '0' && n->value != '1' && n->value != '\0'){
+		printf("%c", n->value);
+		return i;
+	}
+	else if (c[i] == '0'){
+		return search(c, n->left, i + 1);
+	}
+	else {
+		return search(c, n->right, i + 1);
+	}
+}
+
+//add node function
+struct node* newNode_Helper(char a){
+	struct node *x = malloc(sizeof(*x));
+	x->value = a;
+	x->left = NULL; 
+	x->right = NULL;
+
+	return(x); 
+}
+
+void newNode(struct node *n, char x[], int i){
+	
+	if (i == strlen(x) - 1 && x[i] == '0') {
+		n->left = newNode_Helper(x[0]);
+	}
+	else if (i == strlen(x) - 1 && x[i] == '1') {
+		n->right = newNode_Helper(x[0]);
+	}
+	else if (x[i] == '0' && n->left == NULL) {
+		n->left = newNode_Helper('0');
+		newNode(n->left, x, i+1);
+	}
+	else if (x[i] == '1' && n->right == NULL) {
+		n->right = newNode_Helper('1');
+		newNode(n->right, x, i+1);
+	}
+	else if (x[i] == '0' && n->left != NULL){
+		newNode(n->left, x, i+1);
+	}
+	else if (x[i] == '1' && n->right != NULL){
+		newNode(n->right, x, i+1);
+	}
+	//return 0;
+}
 
 int main() {
-	int count;
-	scanf("%d", &count);
+	//Initialize first parent node with dummy value
+	struct node* parent = newNode_Helper('\0');
+
+	//Read decoding imput
+	int N;
+	scanf("%d", &N);
 	int i;
-	char code[count][50];
-	for (i = 0; i <= count; i = i + 1){
-		gets(code[i]);
+	for (i = 0; i <= N; i = i + 1){
+		char code[100];
+		gets(code);
+
+		newNode(parent, code, 1); //Building tree
 	}
 
-	/*
-	for (i = 0; i <= count; i = i + 1){
-		printf("%s",code[i]);
-	}
-	*/
+	//search through tree
 	char message[100000];
 	gets(message);
-	puts(message);
-
-	int len;
-	for (len = 0; len < 100000; len = len + 1){
-
-		
+	int index = 0;
+	
+	while (index < strlen(message)) {
+		index = search(message, parent, index);
 	}
-
+	free(parent);
+	
 	return 0;
 }
