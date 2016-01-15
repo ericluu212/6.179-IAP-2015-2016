@@ -12,7 +12,7 @@ struct node {
 //search tree
 int search(char c[], struct node *n, int i){
 	//printf("%c\n", n->value);
-	if (n->value != '0' && n->value != '1' && n->value != '\0'){
+	if (n->value != '<' && n->value != '>' && n->value != '\0'){
 		printf("%c", n->value);
 		return i;
 	}
@@ -43,11 +43,11 @@ void newNode(struct node *n, char x[], int i){
 		n->right = newNode_Helper(x[0]);
 	}
 	else if (x[i] == '0' && n->left == NULL) {
-		n->left = newNode_Helper('0');
+		n->left = newNode_Helper('<');
 		newNode(n->left, x, i+1);
 	}
 	else if (x[i] == '1' && n->right == NULL) {
-		n->right = newNode_Helper('1');
+		n->right = newNode_Helper('>');
 		newNode(n->right, x, i+1);
 	}
 	else if (x[i] == '0' && n->left != NULL){
