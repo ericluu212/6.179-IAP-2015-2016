@@ -76,7 +76,15 @@ int generateShips(char arr[][11], int numShips, int x){ //Fix this method
 }
 
 int hitCoordinate(char arr[][11], char arr2[][11], int row, int col){
-	if (arr[col + 1][row + 1] == 'S'){
+	if (arr[col + 1][row + 1] == 'X' || arr[col + 1][row + 1] == 'M') {  //To prevent repeat coordinate selection by CPUs
+		printf("%s\n", "CPU has already chosen this coordinate. Trying again..." );
+		int CPUrowTarget = (rand() % 9) + 1;
+		int CPUcolTarget = (rand() % 9) + 1;
+		wait(3000);
+		printf("%s %d %d\n", "CPU targets coordinate ", CPUrowTarget, CPUcolTarget);
+		hitCoordinate(arr, arr2, CPUrowTarget, CPUcolTarget);
+	}
+	else if (arr[col + 1][row + 1] == 'S'){
 		printf("%s\n", "Hit Confirmed! Updating info...");
 		arr2[col + 1][row + 1] = 'X';
 		return 1;
@@ -125,7 +133,8 @@ int main() {
 		printf("%c", ' ');
 		x++;
 	}
-	wait(1000);
+
+	wait(2000);
 
 	//Display Instructions
 	system("cls");
@@ -150,7 +159,6 @@ int main() {
 	}
 
 	//Generate grids
-	//system("cls");
 	char myShips[11][11];
 	char foeShips[11][11];
 	char dummyFoeShips[11][11];
@@ -179,12 +187,6 @@ int main() {
 			printf("%c", '\n');
 		}
 
-		/*
-		//for debugging
-		printf("%c", '\n');
-		printArray(foeShips,10,10);
-		*/
-
 		//Player Attack
 		printf("%s\n", "Your Turn: ");
 		printf("%s\n", "Specify the coordinates that you wish to attack: ");
@@ -193,27 +195,14 @@ int main() {
 
 		int rowTarget = input[0] - '0';
 		int colTarget = input[2] - '0';
-		/*
-		printf("%c\n", input[0]);
-		printf("%c\n", input[1]);
-		printf("%c\n", input[2]);
-		*/
-		//printf("%c\n", input[3]);
-		//scanf("%d %d", &rowTarget, &colTarget);
 
-		while (input[1] != ' ' || isalpha(input[0]) || isalpha(input[2]) ||
+		while (input[1] != ' ' || isalpha(input[0]) || isalpha(input[2]) || input[3] != '\n' ||
 			rowTarget >= 10 || rowTarget < 0 || colTarget >= 10 || colTarget < 0 || 
 			dummyFoeShips[colTarget + 1][rowTarget + 1] == 'X' || dummyFoeShips[colTarget + 1][rowTarget + 1] == 'M'){
 			printf("%s\n", "Invalid coordinates. Please try again.");
 			fgets(input, 5, stdin);
 			rowTarget = input[0] - '0';
 			colTarget = input[2] - '0';
-			/*
-			printf("%c\n", input[0]);
-			printf("%c\n", input[1]);
-			printf("%c\n", input[2]);
-			*/
-			//printf("%c\n", input[3]);
 		}
 
 		int x = hitCoordinate(foeShips, dummyFoeShips, rowTarget, colTarget);
@@ -221,7 +210,7 @@ int main() {
 			foeLives--;
 		}
 		wait(1500);
-		if (foeLives == 0){
+		if (foeLives <= 0){
 			system("cls");
 			printf("%s\n", "Congratulations! You have eliminated all of the enemy ships!");
 			break;
@@ -247,47 +236,22 @@ int main() {
 		}
 
 		printf("%s\n", "CPU's Turn:");
-		int CPUrowTarget = (rand() % 10) + 1;
-		int CPUcolTarget = (rand() % 10) + 1;
+		int CPUrowTarget = (rand() % 9) + 1;
+		int CPUcolTarget = (rand() % 9) + 1;
 		wait(1500);
 
-		/*
-		srand(time(NULL));
-		while ( myShips[CPUcolTarget][CPUrowTarget] == 'M' ||  myShips[CPUcolTarget][CPUrowTarget] == 'X' ){ //To prevent repeat selection of coords
-			int CPUrowTarget = rand() % 10;
-			int CPUcolTarget = rand() % 10;
-		}
-		*/
-
-		printf("%s %d %d\n", "CPU targets coordinate ", CPUrowTarget, CPUcolTarget);
+		printf("%s %d %d\n", "CPU targets coordinate", CPUrowTarget, CPUcolTarget);
 		int y = hitCoordinate(myShips, myShips, CPUrowTarget, CPUcolTarget);
 		if (y == 1){
 			yourLives--;
 		}
-		wait(1500);
-		if (yourLives == 0){
+		wait(1750);
+		if (yourLives <= 0){
 			system("cls");
 			printf("%s\n", "Oh no! All of your ships have been eliminated! Better luck next time!");
 			break;
 		}
 	}
-
-
-
-/*
-	printf("%s\n", "Your ship placement:");
-	printf("%s\n\n", "Note: In this version of the game, ships are allowed to overlap."); //maybe?
-	printf("%s\n", "Ship 1:");
-
-	printf("%s\n", "Specify your ship orientation (v for vertical; h for horizontal): ");
-	scanf("%c", &orient);
-	//orient = getchar();
-	while (orient != 'h' && orient != 'v'){
-		printf("%s\n", "Invalid input. Specify orientation again (v for vertical; h for horizontal): ");
-		scanf("%c", &orient);
-		//break;
-	}
-*/
 
 	return 0;
 }
